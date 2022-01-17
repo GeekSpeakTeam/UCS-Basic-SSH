@@ -1,0 +1,9 @@
+#!/usr/bin/expect
+spawn ssh -t -p 22 10.10.10.20 -l admin
+expect "admin@10.10.10.20's password:" { send "Passw0rd01\r" } 
+expect "#" { send "commit\r" }
+expect "#" { send "top\r" }
+expect "#" { send "scope chassis\r" }
+expect "#" { send "power off\r" }
+expect "want to continue?" { send "y\r" }
+expect "#" { send "exit\r" }
