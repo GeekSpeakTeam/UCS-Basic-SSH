@@ -1,0 +1,47 @@
+>>> # Modules needed
+>>> import paramiko
+>>> from time import sleep
+>>> ssh = paramiko.SSHClient()
+>>> ssh.load_system_host_keys()
+>>> ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+>>>
+>>> # Credentials for the session
+>>> hostname = '10.10.10.20'
+>>> username = 'admin'
+>>> password = 'Passw0rd01'
+>>>
+>>> ssh.connect(hostname=hostname,username=username, password=password,look_for_keys=False, allow_agent=False)
+>>>
+>>> connection = ssh.invoke_shell()
+>>>
+>>> connection.send("top\r")
+4
+>>> sleep(.5)
+>>> connection.send("scope chassis\r")
+14
+>>> sleep(.5)
+>>> connection.send("power on\r")
+9
+>>> sleep(.5)
+>>> connection.send("y\r")
+2
+>>> sleep(.5)
+>>> connection.send("exit\r")
+5
+>>> sleep(.5)
+>>> connection.send("exit\r")
+5
+>>> sleep(.5)
+>>> output = connection.recv(65535)
+>>> print(output.decode("UTF-8"))
+top
+scope chassis
+power on
+C220-FCH1848V1L5# top
+C220-FCH1848V1L5# scope chassis
+C220-FCH1848V1L5 /chassis # power on
+y
+This operation will change the server's power state.
+Do you want to continue?[y|N]C220-FCH1848V1L5 /chassis # exit
+C220-FCH1848V1L5#
+>>>
